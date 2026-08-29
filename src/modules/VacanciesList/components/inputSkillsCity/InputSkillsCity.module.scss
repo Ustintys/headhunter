@@ -1,0 +1,38 @@
+.container{
+  width: 317px;
+}
+
+.containerSkills{
+  border-radius: 12px;
+  padding: 24px;
+  background-color: var(--color-white);
+  margin-bottom: 10px;
+}
+
+.containerCity{
+  border-radius: 12px;
+  padding: 24px;
+  height: 84px;
+  background-color: var(--color-white);
+}
+
+.containerSkills .skillsText{
+  font-family: var(--font-family);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.plusBtn:disabled{
+  color: var(--color-white);
+  background-color: #228be6;
+  opacity: 0.6;
+}
+
+.pillLabel{
+  margin: 3px;
+}
+
+.pillCross{
+  opacity: 0.3;
+  margin: 2px;
+}
