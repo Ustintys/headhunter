@@ -2,7 +2,7 @@ import {Button, Group, TextInput} from "@mantine/core";
 import styles from "./InputVacancy.module.scss";
 import Sheard from '../../../../assets/icon/search.svg?react'
 
-function InputVacancies() {
+function InputVacancy() {
   return (
     <>
       <Group gap={12}>
@@ -18,4 +18,4 @@ function InputVacancies() {
   )
 }
 
-export default InputVacancies;
+export default InputVacancy;

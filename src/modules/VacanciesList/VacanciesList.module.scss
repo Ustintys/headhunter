@@ -6,6 +6,13 @@
   justify-content: space-between;
 }
 
+.containerCards{
+  width: 1000px;
+  margin: 30px auto 25px auto;
+  display: flex;
+  justify-content: space-between;
+}
+
 .titleH1{
   font-family: var(--font-family);
   font-weight: 700;

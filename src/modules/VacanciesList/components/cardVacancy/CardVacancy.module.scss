@@ -1,0 +1,52 @@
+.container{
+  border-radius: 12px;
+  width: 660px;
+  height: 250px;
+  background-color: var(--color-white);
+  margin-bottom: 16px;
+}
+
+.title{
+  font-family: var(--font-family);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--color-dark-primary);
+}
+
+.priceText{
+  font-family: var(--font-family);
+  font-size: 16px;
+}
+
+.expText{
+  font-family: var(--font-family);
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+.Shell{
+  margin-bottom: 16px;
+}
+
+.companyText{
+  font-family: var(--font-family);
+  font-size: 14px;
+  opacity: 0.4;
+}
+
+.Shell .formatText{
+  border-radius: 2px;
+  padding: 1px 6px;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  display: inline-block;
+  font-family: var(--second-family);
+  font-weight: 700;
+  font-size: 9px;
+}
+
+.locationText{
+  font-family: var(--font-family);
+  font-size: 16px;
+}
+
