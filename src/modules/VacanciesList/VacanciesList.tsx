@@ -17,7 +17,7 @@ function VacanciesList() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchVacancy())
+    dispatch(fetchVacancy(1))
   }, [dispatch])
 
   return (
@@ -48,25 +48,25 @@ function VacanciesList() {
             <Alert w={500} mr={90} variant="light" color="red" title="Ошибка загрузки данных...">
               Мы не смогли получить информацию с сервера. Попробуйте обновить страницу или зайти позже.
             </Alert>}
-          <div>
-            {vacancies?.map((vacancy) => (
-              <div key={vacancy.id}>
-                <CardVacancy
-                  id={vacancy.id}
-                  name={vacancy.name}
-                  experience={vacancy.experience}
-                  city={vacancy.city}
-                  company={vacancy.company_name}
-                  space={vacancy.space}
-                  salary={vacancy.salary}
-                />
+          {status === 'resolved' &&
+            <div>
+              {vacancies?.map((vacancy) => (
+                <div key={vacancy.id}>
+                  <CardVacancy
+                    id={vacancy.id}
+                    name={vacancy.name}
+                    experience={vacancy.experience}
+                    city={vacancy.city}
+                    company={vacancy.company_name}
+                    space={vacancy.space}
+                    salary={vacancy.salary}
+                  />
+                </div>
+              ))}
+              <div className={styles.pagination}>
+                <Pagination onChange={(page) => {dispatch(fetchVacancy(page))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
               </div>
-            ))}
-            <div className={styles.pagination}>
-              <Pagination total={Number(pagination?.totalPages)} radius="xs" withEdges />
-            </div>
-
-          </div>
+            </div>}
         </div>
       </div>
     </>

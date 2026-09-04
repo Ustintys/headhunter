@@ -17,10 +17,10 @@ type VacancyState = {
 }
 
 type PaginationState = {
-  currentPage: string,
-  totalPages: string,
-  totalItems: string,
-  itemsPerPage: string,
+  currentPage: number,
+  totalPages: number,
+  totalItems: number,
+  itemsPerPage: number,
   hasNextPage: boolean,
   hasPrevPage: boolean,
 }
@@ -43,12 +43,12 @@ const initialState: VacanciesSliceState = {
   error: null,
 }
 
-export const fetchVacancy = createAsyncThunk<FetchState, void>(
+export const fetchVacancy = createAsyncThunk<FetchState, number>(
   "vacancy/fetchVacancy",
 
-  async function (_, {rejectWithValue}){
+  async function (page, {rejectWithValue}){
     try {
-      const response = await fetch('https://kata-jobs.onrender.com/api/jobs')
+      const response = await fetch(`https://kata-jobs.onrender.com/api/jobs?page=${page}`)
 
       if(!response.ok){
         throw new Error('Unknown error')
