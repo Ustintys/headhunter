@@ -14,10 +14,12 @@ function VacanciesList() {
   const vacancies = useAppSelector(state => state.vacancies.vacancies?.jobs);
   const status = useAppSelector(state => state.vacancies.status);
   const pagination = useAppSelector(state => state.vacancies.vacancies?.pagination)
+  const valueInputVacancy = useAppSelector(state => state.vacancies.valueInputVacancy)
+  const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchVacancy(1))
+    dispatch(fetchVacancy({page: 1}))
   }, [dispatch])
 
   return (
@@ -64,7 +66,7 @@ function VacanciesList() {
                 </div>
               ))}
               <div className={styles.pagination}>
-                <Pagination onChange={(page) => {dispatch(fetchVacancy(page))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
+                <Pagination onChange={(page) => {dispatch(fetchVacancy({page: page, search: valueInputVacancy, city: valueInputCity}))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
               </div>
             </div>}
         </div>

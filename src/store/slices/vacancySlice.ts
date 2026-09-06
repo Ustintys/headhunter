@@ -1,6 +1,7 @@
 import {
   createAsyncThunk,
   createSlice,
+  type PayloadAction
 } from "@reduxjs/toolkit";
 
 type VacancyState = {
@@ -31,24 +32,53 @@ type FetchState = {
   success: boolean,
 }
 
+export type City = 'Все города' | 'Москва' | 'Санкт-Петербург';
+
+type FetchArg = {
+  page: number,
+  search?: string,
+  city?: City,
+}
+
 type VacanciesSliceState = {
   vacancies: FetchState | null,
   status: string,
   error: string | null,
+  valueInputVacancy: string,
+  valueInputCity: City,
+  valueInputPills: string,
+  skills: string[],
 }
 
 const initialState: VacanciesSliceState = {
   vacancies: null,
   status: '',
   error: null,
+  valueInputVacancy: '',
+  valueInputCity: 'Все города',
+  valueInputPills: '',
+  skills: ['JavaScript', 'React', 'Redux', 'ReduxToolkit', 'Nextjs'],
 }
 
-export const fetchVacancy = createAsyncThunk<FetchState, number>(
+export const fetchVacancy = createAsyncThunk<FetchState, FetchArg>(
   "vacancy/fetchVacancy",
 
-  async function (page, {rejectWithValue}){
+  async function ({page, search, city}, {rejectWithValue}){
     try {
-      const response = await fetch(`https://kata-jobs.onrender.com/api/jobs?page=${page}`)
+
+      const params = new URLSearchParams();
+
+      params.set("page", String(page));
+
+      if (city && city != 'Все города'){
+        params.set("city", city);
+      }
+
+      if (search) {
+        params.set("search", search);
+      }
+
+      const response = await fetch(`https://kata-jobs.onrender.com/api/jobs?${params}`)
 
       if(!response.ok){
         throw new Error('Unknown error')
@@ -71,6 +101,23 @@ const vacancySlice = createSlice({
   initialState,
 
   reducers:{
+
+    setValueInputVacancy(state, action: PayloadAction<string>){
+      state.valueInputVacancy = action.payload;
+    },
+
+    setValueInputCity(state, action: PayloadAction<City>){
+      state.valueInputCity = action.payload;
+    },
+
+    setValueInputPills(state, action: PayloadAction<string>){
+      state.valueInputPills = action.payload;
+    },
+
+    addSkills(state, action: PayloadAction<string>){
+      const skill = action.payload;
+      state.skills.push(skill.trim());
+    }
 
   },
 
@@ -95,5 +142,5 @@ const vacancySlice = createSlice({
 
 });
 
-export const {} = vacancySlice.actions;
+export const {setValueInputVacancy, setValueInputCity, setValueInputPills, addSkills} = vacancySlice.actions;
 export default vacancySlice.reducer;
