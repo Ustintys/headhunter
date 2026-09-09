@@ -15,11 +15,12 @@ function VacanciesList() {
   const status = useAppSelector(state => state.vacancies.status);
   const pagination = useAppSelector(state => state.vacancies.vacancies?.pagination)
   const valueInputVacancy = useAppSelector(state => state.vacancies.valueInputVacancy)
-  const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity)
+  const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity);
+  const skills = useAppSelector(state => state.vacancies.skills)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchVacancy({page: 1}))
+    dispatch(fetchVacancy({page: 1, skills: skills}))
   }, [dispatch])
 
   return (
@@ -50,6 +51,10 @@ function VacanciesList() {
             <Alert w={500} mr={90} variant="light" color="red" title="Ошибка загрузки данных...">
               Мы не смогли получить информацию с сервера. Попробуйте обновить страницу или зайти позже.
             </Alert>}
+          {status === 'empty' &&
+            <Alert w={500} mr={90} variant="light" color="red" title="По вышему запросу ничего не найдено">
+              Попробуйте изменить параметры поиска.
+            </Alert>}
           {status === 'resolved' &&
             <div>
               {vacancies?.map((vacancy) => (
@@ -65,8 +70,8 @@ function VacanciesList() {
                   />
                 </div>
               ))}
-              <div className={styles.pagination}>
-                <Pagination onChange={(page) => {dispatch(fetchVacancy({page: page, search: valueInputVacancy, city: valueInputCity}))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
+              <div className={styles.paginationDiv}>
+                <Pagination classNames={{root: styles.paginationRoot}} onChange={(page) => {dispatch(fetchVacancy({page: page, search: valueInputVacancy, city: valueInputCity, skills: skills}))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
               </div>
             </div>}
         </div>

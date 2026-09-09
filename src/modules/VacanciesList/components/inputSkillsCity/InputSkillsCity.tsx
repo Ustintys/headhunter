@@ -13,7 +13,7 @@ import LocationIcon from '../../../../assets/icon/location.svg?react';
 import {useAppDispatch, useAppSelector} from "../../../../store/hooks.ts";
 import {
   addSkills,
-  type City,
+  type City, deleteSkills, fetchVacancy,
   setValueInputCity, setValueInputPills
 } from "../../../../store/slices/vacancySlice.ts";
 import {useState} from "react";
@@ -24,15 +24,39 @@ function InputSkillsCity(){
   const value = useAppSelector(state => state.vacancies.valueInputCity);
   const skills = useAppSelector(state => state.vacancies.skills);
   const valueInputPills = useAppSelector(state => state.vacancies.valueInputPills);
+  const valueInputVacancy = useAppSelector(state => state.vacancies.valueInputVacancy);
+  const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity);
 
-  const [isDisabled, setIsDisabled] = useState<boolean>(true);
+  const [isDisabledBtn, setIsDisabledBtn] = useState<boolean>(true);
+  const isDisabledInput = skills.length >= 10;
 
   function checkValueInputPills(value: string){
     if(value != ''){
-      setIsDisabled(false);
+      setIsDisabledBtn(false);
     } else {
-      setIsDisabled(true);
+      setIsDisabledBtn(true);
     }
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+
+    const skill = event.currentTarget.value;
+
+    if (event.key === 'Enter') {
+      event.preventDefault();
+
+      if (!skill.trim()) return;
+
+      dispatch(addSkills(skill));
+      setIsDisabledBtn(true)
+    }
+  };
+
+  function errorInput(){
+    if(isDisabledInput){
+      return 'слишком много навыков';
+    }
+    return '';
   }
 
   return (
@@ -41,24 +65,35 @@ function InputSkillsCity(){
 
         <Text className={styles.skillsText} fw={600}>Ключевые навыки</Text>
 
-        <Group justify='space-between' gap={8}>
-          <PillsInput w={227} size='xs'>
+        <Group justify='space-between' gap={8} align='flex-start'>
+          <PillsInput w={227} size='xs' error={errorInput()}>
             <PillsInput.Field placeholder="Навык"
                               value={valueInputPills}
                               onChange={(event) => {
                                 dispatch(setValueInputPills(event.currentTarget.value));
                                 checkValueInputPills(event.currentTarget.value);
                               }}
+                              onKeyDown={handleKeyDown}
+                              disabled={isDisabledInput}
             />
           </PillsInput>
-          <ActionIcon onClick={()=>{dispatch(addSkills(valueInputPills))}} w={34} h={30} disabled={isDisabled} className={styles.plusBtn}>
+          <ActionIcon onClick={()=>{dispatch(addSkills(valueInputPills)); setIsDisabledBtn(true); dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: valueInputCity, skills: skills}))}}
+                      w={34}
+                      h={30}
+                      disabled={isDisabledBtn}
+                      className={styles.plusBtn}
+          >
             <Plus />
           </ActionIcon>
         </Group>
 
         <PillGroup mt={12} w={230}>
           {skills.map((skill ) => (
-            <Pill key={skill} withRemoveButton classNames={{label: styles.pillLabel, remove: styles.pillCross}}>{skill}</Pill>
+            <Pill onRemove={() => {dispatch(deleteSkills(skill)); dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: valueInputCity, skills: skills}))}}
+                  key={skill}
+                  withRemoveButton
+                  classNames={{label: styles.pillLabel, remove: styles.pillCross}}
+            >{skill}</Pill>
           ))}
         </PillGroup>
 
@@ -67,7 +102,7 @@ function InputSkillsCity(){
         <NativeSelect
           leftSection={<LocationIcon />}
           leftSectionPointerEvents="none"
-          onChange={(event) => {dispatch(setValueInputCity(event.currentTarget.value as City))}}
+          onChange={(event) => {dispatch(setValueInputCity(event.currentTarget.value as City)); dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: event.currentTarget.value as City, skills: skills}))}}
           value={value}
           data={['Все города', 'Москва', 'Санкт-Петербург']}
           radius="sm"

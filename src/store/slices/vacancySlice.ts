@@ -3,6 +3,7 @@ import {
   createSlice,
   type PayloadAction
 } from "@reduxjs/toolkit";
+import type {RootState} from "../store.ts";
 
 type VacancyState = {
   id: number,
@@ -38,6 +39,7 @@ type FetchArg = {
   page: number,
   search?: string,
   city?: City,
+  skills: string[],
 }
 
 type VacanciesSliceState = {
@@ -63,12 +65,15 @@ const initialState: VacanciesSliceState = {
 export const fetchVacancy = createAsyncThunk<FetchState, FetchArg>(
   "vacancy/fetchVacancy",
 
-  async function ({page, search, city}, {rejectWithValue}){
+  async function ({page, search, city, skills}, {rejectWithValue, getState}){
     try {
+
+      const state = getState() as RootState;
 
       const params = new URLSearchParams();
 
       params.set("page", String(page));
+
 
       if (city && city != 'Все города'){
         params.set("city", city);
@@ -76,6 +81,11 @@ export const fetchVacancy = createAsyncThunk<FetchState, FetchArg>(
 
       if (search) {
         params.set("search", search);
+      }
+
+      if(state.vacancies.skills.length > 0){
+        const skillsString = skills.join(',');
+        params.set('skills', skillsString);
       }
 
       const response = await fetch(`https://kata-jobs.onrender.com/api/jobs?${params}`)
@@ -115,8 +125,21 @@ const vacancySlice = createSlice({
     },
 
     addSkills(state, action: PayloadAction<string>){
+
       const skill = action.payload;
-      state.skills.push(skill.trim());
+      const overlap = state.skills.find((skill) => skill.toLowerCase() === state.valueInputPills.toLowerCase());
+
+      if (overlap){
+        state.valueInputPills = '';
+        return
+      } else {
+        state.skills.push(skill.trim());
+      }
+      state.valueInputPills = '';
+    },
+
+    deleteSkills(state, action: PayloadAction<string>){
+      state.skills = state.skills.filter((skill) => skill !== action.payload);
     }
 
   },
@@ -132,6 +155,9 @@ const vacancySlice = createSlice({
       .addCase(fetchVacancy.fulfilled, (state, action) => {
         state.status = 'resolved'
         state.vacancies = action.payload;
+        if(state.vacancies.jobs.length === 0){
+          state.status = 'empty'
+        }
       })
 
       .addCase(fetchVacancy.rejected, (state, action) => {
@@ -142,5 +168,5 @@ const vacancySlice = createSlice({
 
 });
 
-export const {setValueInputVacancy, setValueInputCity, setValueInputPills, addSkills} = vacancySlice.actions;
+export const {setValueInputVacancy, setValueInputCity, setValueInputPills, addSkills, deleteSkills} = vacancySlice.actions;
 export default vacancySlice.reducer;
