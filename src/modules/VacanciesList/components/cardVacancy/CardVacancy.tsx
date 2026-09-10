@@ -24,7 +24,9 @@ function CardVacancy({name, experience, city, company, space, salary }: CardVaca
         </div>
         <div className={styles.Shell}>
           <Text fw={400} className={styles.companyText}>{company}</Text>
-          <Text  className={styles.formatText}>{space}</Text>
+          {space === 'office' && <Text  className={styles.formatText} bg='lightGray' c='gray'>Офис</Text>}
+          {space === 'remote' && <Text  className={styles.formatText} bg='indigo.6' c='white'>Можно удалённо</Text>}
+          {space === 'hybrid' && <Text  className={styles.formatText} bg='black' c='white'>Гибрид</Text>}
           <Text fw={400} className={styles.locationText}>{city}</Text>
         </div>
         <Button w={175} h={36} radius='sm' component='a' fw={400} color='black'>Смотреть вакансию</Button>
