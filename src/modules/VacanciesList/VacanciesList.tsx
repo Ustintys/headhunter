@@ -2,7 +2,7 @@ import styles from './VacanciesList.module.scss'
 import {Divider, Loader, Alert, Pagination} from "@mantine/core";
 import InputVacancy from "./components/inputVacancy/InputVacancy.tsx";
 import InputSkillsCity from "./components/inputSkillsCity/InputSkillsCity.tsx";
-import CardVacancy from "./components/cardVacancy/CardVacancy.tsx";
+import CardVacancy from "../../components/cardVacancy/CardVacancy.tsx";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {fetchVacancy} from "../../store/slices/vacancySlice.ts";
@@ -67,6 +67,7 @@ function VacanciesList() {
                     company={vacancy.company_name}
                     space={vacancy.space}
                     salary={vacancy.salary}
+                    mode={'BTN'}
                   />
                 </div>
               ))}

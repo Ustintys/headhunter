@@ -9,10 +9,11 @@ type CardVacancyProps = {
   company: string;
   space: string;
   salary: string;
+  mode: 'BTN' | 'INFO';
 }
 
 
-function CardVacancy({name, experience, city, company, space, salary }: CardVacancyProps) {
+function CardVacancy({name, experience, city, company, space, salary, mode }: CardVacancyProps) {
   return (
     <Card padding={24} className={styles.container}>
         <div className={styles.Shell}>
@@ -29,7 +30,9 @@ function CardVacancy({name, experience, city, company, space, salary }: CardVaca
           {space === 'hybrid' && <Text  className={styles.formatText} bg='black' c='white'>Гибрид</Text>}
           <Text fw={400} className={styles.locationText}>{city}</Text>
         </div>
-        <Button w={175} h={36} radius='sm' component='a' fw={400} color='black'>Смотреть вакансию</Button>
+      {mode === 'BTN' && (
+        <Button w={175} h={36} radius='sm' component='a' fw={400} color='black' mt={12}>Смотреть вакансию</Button>
+      )}
     </Card>
   )
 }
