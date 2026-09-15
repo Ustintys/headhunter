@@ -48,6 +48,10 @@ function InputSkillsCity(){
       if (!skill.trim()) return;
 
       dispatch(addSkills(skill));
+
+      const newSkills = [...skills, skill.trim()];
+
+      dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: valueInputCity, skills: newSkills}))
       setIsDisabledBtn(true)
     }
   };
