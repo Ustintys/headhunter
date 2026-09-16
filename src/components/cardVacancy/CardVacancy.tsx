@@ -1,5 +1,6 @@
 import styles from './CardVacancy.module.scss';
 import {Button, Card, Group, Text} from "@mantine/core";
+import {Link} from "react-router";
 
 type CardVacancyProps = {
   id: number;
@@ -13,7 +14,7 @@ type CardVacancyProps = {
 }
 
 
-function CardVacancy({name, experience, city, company, space, salary, mode }: CardVacancyProps) {
+function CardVacancy({name, experience, city, company, space, salary, mode, id }: CardVacancyProps) {
   return (
     <Card padding={24} className={styles.container}>
         <div className={styles.Shell}>
@@ -31,7 +32,9 @@ function CardVacancy({name, experience, city, company, space, salary, mode }: Ca
           <Text fw={400} className={styles.locationText}>{city}</Text>
         </div>
       {mode === 'BTN' && (
-        <Button w={175} h={36} radius='sm' component='a' fw={400} color='black' mt={12}>Смотреть вакансию</Button>
+          <Link to={`${id}`}>
+            <Button w={175} h={36} radius='sm' component='a' fw={400} color='black' mt={12}>Смотреть вакансию</Button>
+          </Link>
       )}
     </Card>
   )

@@ -1,10 +1,10 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import {MantineProvider} from "@mantine/core";
 import {theme} from "./theme.ts";
 import {Provider} from "react-redux";
 import {store} from "../store/store.ts";
+import {BrowserRouter} from "react-router";
 //--------------------------------------------------------
 import './styles/normalize.scss';
 import './styles/index.scss';
@@ -18,13 +18,12 @@ import "@fontsource/inter/600.css";
 import "@fontsource/inter/700.css";
 import "@mantine/core/styles.css";
 
-
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
     <MantineProvider theme={theme}>
       <Provider store={store}>
-        <App />
+        <BrowserRouter basename="/headhunter">
+          <App />
+        </BrowserRouter>
       </Provider>
     </MantineProvider>
-  </StrictMode>,
 )
