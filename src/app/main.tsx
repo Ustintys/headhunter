@@ -21,7 +21,7 @@ import "@mantine/core/styles.css";
 createRoot(document.getElementById('root')!).render(
     <MantineProvider theme={theme}>
       <Provider store={store}>
-        <BrowserRouter basename="/headhunter">
+        <BrowserRouter basename={import.meta.env.PROD ? '/headhunter' : '/'}>
           <App />
         </BrowserRouter>
       </Provider>

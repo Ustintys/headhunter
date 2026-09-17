@@ -140,6 +140,10 @@ const vacancySlice = createSlice({
 
     deleteSkills(state, action: PayloadAction<string>){
       state.skills = state.skills.filter((skill) => skill !== action.payload);
+    },
+
+    setSkills(state, action: PayloadAction<string[]>) {
+      state.skills = action.payload;
     }
 
   },
@@ -168,5 +172,5 @@ const vacancySlice = createSlice({
 
 });
 
-export const {setValueInputVacancy, setValueInputCity, setValueInputPills, addSkills, deleteSkills} = vacancySlice.actions;
+export const {setValueInputVacancy, setValueInputCity, setValueInputPills, addSkills, deleteSkills, setSkills} = vacancySlice.actions;
 export default vacancySlice.reducer;

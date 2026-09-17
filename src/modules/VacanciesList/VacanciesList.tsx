@@ -5,8 +5,9 @@ import InputSkillsCity from "./components/inputSkillsCity/InputSkillsCity.tsx";
 import CardVacancy from "../../components/cardVacancy/CardVacancy.tsx";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
-import {fetchVacancy} from "../../store/slices/vacancySlice.ts";
-
+import {fetchVacancy, setValueInputCity, setValueInputVacancy, setSkills} from "../../store/slices/vacancySlice.ts";
+import { useSearchParams } from 'react-router';
+import type {City} from "../../store/slices/vacancySlice.ts";
 
 
 function VacanciesList() {
@@ -17,32 +18,78 @@ function VacanciesList() {
   const valueInputVacancy = useAppSelector(state => state.vacancies.valueInputVacancy)
   const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity);
   const skills = useAppSelector(state => state.vacancies.skills)
+  const reduxSkills = useAppSelector(state => state.vacancies.skills)
   const dispatch = useAppDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    dispatch(fetchVacancy({page: 1, skills: skills}))
-  }, [dispatch])
+    const search = searchParams.get('search') ?? '';
+
+    const cityParam = searchParams.get('city');
+    const city: City =
+      cityParam === 'Москва' || cityParam === 'Санкт-Петербург'
+        ? cityParam
+        : 'Все города';
+
+    const skillsParam = searchParams.get('skills');
+    const skills = skillsParam
+      ? skillsParam.split(',')
+      : reduxSkills;
+
+    dispatch(setValueInputVacancy(search));
+    dispatch(setValueInputCity(city));
+    dispatch(setSkills(skills));
+
+    dispatch(fetchVacancy({
+      page: 1,
+      search,
+      city,
+      skills,
+    }));
+  }, [dispatch, searchParams]);
+
+  function handleSearch() {
+    setSearchParams({
+        search: valueInputVacancy,
+        city: valueInputCity,
+        skills: skills.join(','),
+    });
+  }
+
+  function handleSkillsChange(newSkills: string[]) {
+    setSearchParams({
+      search: valueInputVacancy,
+      city: valueInputCity,
+      skills: newSkills.join(','),
+    });
+  }
+
+  function handleSearchCityChange(newCity: City) {
+    setSearchParams({
+      search: valueInputVacancy,
+      city: newCity,
+      skills: skills.join(','),
+    })
+  }
 
   return (
     <>
       <div className={styles.container}>
-
         <div className={styles.containerText}>
           <h1 className={styles.titleH1}>Список вакансий</h1>
           <h3 className={styles.titleH3}>по профессии Frontend-разработчик</h3>
         </div>
 
         <div className={styles.containerInputVacancies}>
-          <InputVacancy />
+          <InputVacancy handleSearch={handleSearch} />
         </div>
-
       </div>
 
       <Divider size='xs' className={styles.divider} />
 
       <div className={styles.containerCards}>
 
-        <InputSkillsCity />
+        <InputSkillsCity handleSkillsChange={handleSkillsChange} handleSearchCityChange={handleSearchCityChange} />
 
         <div>
           {status === 'loading' &&

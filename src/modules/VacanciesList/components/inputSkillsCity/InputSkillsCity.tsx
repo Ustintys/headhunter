@@ -13,19 +13,23 @@ import LocationIcon from '../../../../assets/icon/location.svg?react';
 import {useAppDispatch, useAppSelector} from "../../../../store/hooks.ts";
 import {
   addSkills,
-  type City, deleteSkills, fetchVacancy,
+  type City, deleteSkills,
   setValueInputCity, setValueInputPills
 } from "../../../../store/slices/vacancySlice.ts";
 import {useState} from "react";
 
-function InputSkillsCity(){
+
+type InputSkillsCityProps = {
+  handleSkillsChange: (newSkills: string[]) => void;
+  handleSearchCityChange: (newCity: City) => void;
+}
+
+function InputSkillsCity({ handleSkillsChange, handleSearchCityChange }: InputSkillsCityProps){
 
   const dispatch = useAppDispatch();
   const value = useAppSelector(state => state.vacancies.valueInputCity);
   const skills = useAppSelector(state => state.vacancies.skills);
   const valueInputPills = useAppSelector(state => state.vacancies.valueInputPills);
-  const valueInputVacancy = useAppSelector(state => state.vacancies.valueInputVacancy);
-  const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity);
 
   const [isDisabledBtn, setIsDisabledBtn] = useState<boolean>(true);
   const isDisabledInput = skills.length >= 10;
@@ -51,7 +55,7 @@ function InputSkillsCity(){
 
       const newSkills = [...skills, skill.trim()];
 
-      dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: valueInputCity, skills: newSkills}))
+      handleSkillsChange(newSkills);
       setIsDisabledBtn(true)
     }
   };
@@ -81,7 +85,7 @@ function InputSkillsCity(){
                               disabled={isDisabledInput}
             />
           </PillsInput>
-          <ActionIcon onClick={()=>{dispatch(addSkills(valueInputPills)); setIsDisabledBtn(true); dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: valueInputCity, skills: skills}))}}
+          <ActionIcon onClick={()=>{dispatch(addSkills(valueInputPills)); setIsDisabledBtn(true); handleSkillsChange([...skills, valueInputPills])}}
                       w={34}
                       h={30}
                       disabled={isDisabledBtn}
@@ -93,7 +97,7 @@ function InputSkillsCity(){
 
         <PillGroup mt={12} w={230}>
           {skills.map((skill ) => (
-            <Pill onRemove={() => {dispatch(deleteSkills(skill)); dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: valueInputCity, skills: skills}))}}
+            <Pill onRemove={() => {dispatch(deleteSkills(skill)); handleSkillsChange(skills.filter((chooseSkill) => chooseSkill !== skill))}}
                   key={skill}
                   withRemoveButton
                   classNames={{label: styles.pillLabel, remove: styles.pillCross}}
@@ -106,7 +110,7 @@ function InputSkillsCity(){
         <NativeSelect
           leftSection={<LocationIcon />}
           leftSectionPointerEvents="none"
-          onChange={(event) => {dispatch(setValueInputCity(event.currentTarget.value as City)); dispatch(fetchVacancy({page: 1, search: valueInputVacancy, city: event.currentTarget.value as City, skills: skills}))}}
+          onChange={(event) => {dispatch(setValueInputCity(event.currentTarget.value as City)); handleSearchCityChange(event.currentTarget.value as City)}}
           value={value}
           data={['Все города', 'Москва', 'Санкт-Петербург']}
           radius="sm"
