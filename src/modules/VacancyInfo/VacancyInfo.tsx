@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {fetchVacancyWithId} from "../../store/slices/vacancyDetailSlice.ts";
 import {useParams} from "react-router";
+import NoteFound from "../../components/404/NoteFound.tsx";
 
 function VacancyInfo() {
 
@@ -14,9 +15,18 @@ function VacancyInfo() {
   const vacancyData = useAppSelector(state => state.vacancyDetails.vacancy);
   const status = useAppSelector(state => state.vacancyDetails.status);
 
+
+
   useEffect(() => {
     dispatch(fetchVacancyWithId(Number(vacancyId)))
-  }, [dispatch]);
+  }, [dispatch, vacancyId]);
+
+
+
+  if (!vacancyId || isNaN(Number(vacancyId))) {
+    return <NoteFound />;
+  }
+
 
   return (
     <div className={styles.container}>

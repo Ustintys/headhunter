@@ -4,7 +4,6 @@ import {MantineProvider} from "@mantine/core";
 import {theme} from "./theme.ts";
 import {Provider} from "react-redux";
 import {store} from "../store/store.ts";
-import {BrowserRouter} from "react-router";
 //--------------------------------------------------------
 import './styles/normalize.scss';
 import './styles/index.scss';
@@ -21,9 +20,7 @@ import "@mantine/core/styles.css";
 createRoot(document.getElementById('root')!).render(
     <MantineProvider theme={theme}>
       <Provider store={store}>
-        <BrowserRouter basename={import.meta.env.PROD ? '/headhunter' : '/'}>
           <App />
-        </BrowserRouter>
       </Provider>
     </MantineProvider>
 )

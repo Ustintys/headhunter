@@ -22,8 +22,6 @@ function VacanciesList() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
-
-
   useEffect(() => {
     const search = searchParams.get('search') ?? '';
 
