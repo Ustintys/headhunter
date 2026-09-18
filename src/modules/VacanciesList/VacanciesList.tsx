@@ -23,6 +23,14 @@ function VacanciesList() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    setSearchParams({
+      search: valueInputVacancy,
+      city: valueInputCity,
+      skills: skills.join(','),
+    })
+  }, []);
+
+  useEffect(() => {
     const search = searchParams.get('search') ?? '';
 
     const cityParam = searchParams.get('city');
