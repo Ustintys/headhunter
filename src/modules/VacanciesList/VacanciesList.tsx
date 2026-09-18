@@ -22,13 +22,7 @@ function VacanciesList() {
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  useEffect(() => {
-    setSearchParams({
-      search: valueInputVacancy,
-      city: valueInputCity,
-      skills: skills.join(','),
-    })
-  }, []);
+
 
   useEffect(() => {
     const search = searchParams.get('search') ?? '';
@@ -55,6 +49,29 @@ function VacanciesList() {
       skills,
     }));
   }, [dispatch, searchParams]);
+
+  useEffect(() => {
+
+    const search = searchParams.get('search') ?? valueInputVacancy;
+
+    const cityParam = searchParams.get('city');
+    const city: City =
+      cityParam === 'Москва' || cityParam === 'Санкт-Петербург'
+        ? cityParam
+        : 'Все города';
+
+    const skillsParam = searchParams.get('skills');
+    const skills = skillsParam
+      ? skillsParam.split(',')
+      : reduxSkills;
+
+
+    setSearchParams({
+      search: search,
+      city: city,
+      skills: skills.join(','),
+    })
+  }, []);
 
   function handleSearch() {
     setSearchParams({
