@@ -1,1 +1,1 @@
-https://ustintys.github.io/vacancies/moscow?search=&skills=JavaScript%2CReact%2CRedux%2CReduxToolkit%2CNextjs
+https://ustintys.github.io/headhunter/vacancies/moscow
