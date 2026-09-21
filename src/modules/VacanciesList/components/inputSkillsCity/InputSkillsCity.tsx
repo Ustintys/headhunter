@@ -6,28 +6,24 @@ import {
   PillGroup,
   PillsInput,
   Text,
-  NativeSelect
 } from "@mantine/core";
 import Plus from '../../../../assets/icon/plus.svg?react';
-import LocationIcon from '../../../../assets/icon/location.svg?react';
 import {useAppDispatch, useAppSelector} from "../../../../store/hooks.ts";
 import {
   addSkills,
-  type City, deleteSkills,
-  setValueInputCity, setValueInputPills
+  deleteSkills,
+  setValueInputPills
 } from "../../../../store/slices/vacancySlice.ts";
 import {useState} from "react";
 
 
 type InputSkillsCityProps = {
   handleSkillsChange: (newSkills: string[]) => void;
-  handleSearchCityChange: (newCity: City) => void;
 }
 
-function InputSkillsCity({ handleSkillsChange, handleSearchCityChange }: InputSkillsCityProps){
+function InputSkillsCity({ handleSkillsChange}: InputSkillsCityProps){
 
   const dispatch = useAppDispatch();
-  const value = useAppSelector(state => state.vacancies.valueInputCity);
   const skills = useAppSelector(state => state.vacancies.skills);
   const valueInputPills = useAppSelector(state => state.vacancies.valueInputPills);
 
@@ -106,16 +102,16 @@ function InputSkillsCity({ handleSkillsChange, handleSearchCityChange }: InputSk
         </PillGroup>
 
       </div>
-      <div className={styles.containerCity}>
-        <NativeSelect
-          leftSection={<LocationIcon />}
-          leftSectionPointerEvents="none"
-          onChange={(event) => {dispatch(setValueInputCity(event.currentTarget.value as City)); handleSearchCityChange(event.currentTarget.value as City)}}
-          value={value}
-          data={['Все города', 'Москва', 'Санкт-Петербург']}
-          radius="sm"
-        />
-      </div>
+      {/*<div className={styles.containerCity}>*/}
+      {/*  <NativeSelect*/}
+      {/*    leftSection={<LocationIcon />}*/}
+      {/*    leftSectionPointerEvents="none"*/}
+      {/*    onChange={(event) => {dispatch(setValueInputCity(event.currentTarget.value as City)); handleSearchCityChange(event.currentTarget.value as City)}}*/}
+      {/*    value={value}*/}
+      {/*    data={['Все города', 'Москва', 'Санкт-Петербург']}*/}
+      {/*    radius="sm"*/}
+      {/*  />*/}
+      {/*</div>*/}
     </div>
   )
 }

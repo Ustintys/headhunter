@@ -1,13 +1,14 @@
 import styles from './VacanciesList.module.scss'
-import {Divider, Loader, Alert, Pagination} from "@mantine/core";
+import {Divider, Loader, Alert, Pagination, Tabs} from "@mantine/core";
 import InputVacancy from "./components/inputVacancy/InputVacancy.tsx";
 import InputSkillsCity from "./components/inputSkillsCity/InputSkillsCity.tsx";
 import CardVacancy from "../../components/cardVacancy/CardVacancy.tsx";
 import {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../store/hooks.ts";
 import {fetchVacancy, setValueInputCity, setValueInputVacancy, setSkills} from "../../store/slices/vacancySlice.ts";
-import { useSearchParams } from 'react-router';
+import {useNavigate, useParams, useSearchParams} from 'react-router';
 import type {City} from "../../store/slices/vacancySlice.ts";
+import NoteFound from "../../components/404/NoteFound.tsx";
 
 
 function VacanciesList() {
@@ -19,16 +20,23 @@ function VacanciesList() {
   const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity);
   const reduxSkills = useAppSelector(state => state.vacancies.skills)
   const dispatch = useAppDispatch();
+
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+  const { city } = useParams();
+
+  if (city !== 'moscow' && city !== 'petersburg') {
+    return <NoteFound />;
+  }
+
+  const selectedCity: City =
+    city === 'moscow'
+      ? 'Москва'
+      : 'Санкт-Петербург';
 
   useEffect(() => {
     const search = searchParams.get('search') ?? '';
-
-    const cityParam = searchParams.get('city');
-    const city: City =
-      cityParam === 'Москва' || cityParam === 'Санкт-Петербург'
-        ? cityParam
-        : 'Все города';
 
     const skillsParam = searchParams.get('skills');
     let skills: string[];
@@ -41,16 +49,16 @@ function VacanciesList() {
     }
 
     dispatch(setValueInputVacancy(search));
-    dispatch(setValueInputCity(city));
+    dispatch(setValueInputCity(selectedCity));
     dispatch(setSkills(skills));
 
     dispatch(fetchVacancy({
       page: 1,
       search,
-      city,
+      city: selectedCity,
       skills,
     }));
-  }, [dispatch, searchParams]);
+  }, [dispatch, searchParams, selectedCity]);
 
   useEffect(() => {
     if(searchParams.has('search')){
@@ -59,7 +67,6 @@ function VacanciesList() {
 
     setSearchParams({
       search: valueInputVacancy,
-      city: valueInputCity,
       skills: reduxSkills.join(','),
     })
   }, []);
@@ -67,7 +74,6 @@ function VacanciesList() {
   function handleSearch() {
     setSearchParams({
         search: valueInputVacancy,
-        city: valueInputCity,
         skills: reduxSkills.join(','),
     });
   }
@@ -75,17 +81,8 @@ function VacanciesList() {
   function handleSkillsChange(newSkills: string[]) {
     setSearchParams({
       search: valueInputVacancy,
-      city: valueInputCity,
       skills: newSkills.join(','),
     });
-  }
-
-  function handleSearchCityChange(newCity: City) {
-    setSearchParams({
-      search: valueInputVacancy,
-      city: newCity,
-      skills: reduxSkills.join(','),
-    })
   }
 
   return (
@@ -103,9 +100,38 @@ function VacanciesList() {
 
       <Divider size='xs' className={styles.divider} />
 
+      <div className={styles.containerTabs}>
+        <Tabs
+          className={styles.Tabs}
+          value={city}
+          onChange={(value)=>{
+            if (value === 'moscow') {
+              navigate('/vacancies/moscow');
+              setSearchParams({
+                search: valueInputVacancy,
+                skills: reduxSkills.join(','),
+              });
+            }
+
+            if (value === 'petersburg') {
+              navigate('/vacancies/petersburg');
+              setSearchParams({
+                search: valueInputVacancy,
+                skills: reduxSkills.join(','),
+              });
+            }
+          }}
+        >
+          <Tabs.List>
+            <Tabs.Tab value="moscow" fw={400}>Москва</Tabs.Tab>
+            <Tabs.Tab value="petersburg" fw={400}>Санкт-Петербург</Tabs.Tab>
+          </Tabs.List>
+        </Tabs>
+      </div>
+
       <div className={styles.containerCards}>
 
-        <InputSkillsCity handleSkillsChange={handleSkillsChange} handleSearchCityChange={handleSearchCityChange} />
+        <InputSkillsCity handleSkillsChange={handleSkillsChange} />
 
         <div>
           {status === 'loading' &&

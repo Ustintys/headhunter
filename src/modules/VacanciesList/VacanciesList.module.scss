@@ -35,3 +35,17 @@
   justify-content: center;
   margin-bottom: 25px;
 }
+
+.containerTabs{
+  width: 1000px;
+  margin: 30px auto 25px auto;
+}
+
+.Tabs{
+  width: 659px;
+  margin-left: auto;
+  :global(.mantine-Tabs-list::before) {
+    display: none;
+  }
+}
+

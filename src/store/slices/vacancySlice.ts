@@ -33,7 +33,7 @@ type FetchState = {
   success: boolean,
 }
 
-export type City = 'Все города' | 'Москва' | 'Санкт-Петербург';
+export type City = 'Москва' | 'Санкт-Петербург';
 
 type FetchArg = {
   page: number,
@@ -57,7 +57,7 @@ const initialState: VacanciesSliceState = {
   status: '',
   error: null,
   valueInputVacancy: '',
-  valueInputCity: 'Все города',
+  valueInputCity: 'Москва',
   valueInputPills: '',
   skills: ['JavaScript', 'React', 'Redux', 'ReduxToolkit', 'Nextjs'],
 }
@@ -75,7 +75,7 @@ export const fetchVacancy = createAsyncThunk<FetchState, FetchArg>(
       params.set("page", String(page));
 
 
-      if (city && city != 'Все города'){
+      if (city){
         params.set("city", city);
       }
 
