@@ -24,6 +24,11 @@ const router = createBrowserRouter(
       <Route path='*' element={<NoteFound />}/>
     </Route>
   ),
+  {
+
+    basename: import.meta.env.PROD ? '/headhunter' : '/',
+
+  }
 )
 
 function App() {
