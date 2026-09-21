@@ -17,11 +17,9 @@ function VacanciesList() {
   const pagination = useAppSelector(state => state.vacancies.vacancies?.pagination)
   const valueInputVacancy = useAppSelector(state => state.vacancies.valueInputVacancy)
   const valueInputCity = useAppSelector(state => state.vacancies.valueInputCity);
-  const skills = useAppSelector(state => state.vacancies.skills)
   const reduxSkills = useAppSelector(state => state.vacancies.skills)
   const dispatch = useAppDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-
 
 
   useEffect(() => {
@@ -34,9 +32,12 @@ function VacanciesList() {
         : 'Все города';
 
     const skillsParam = searchParams.get('skills');
-    const skills = skillsParam
-      ? skillsParam.split(',')
-      : reduxSkills;
+    const skills =
+      skillsParam === null
+        ? reduxSkills
+        : skillsParam
+          ? skillsParam.split(',')
+          : [];
 
     dispatch(setValueInputVacancy(search));
     dispatch(setValueInputCity(city));
@@ -50,34 +51,25 @@ function VacanciesList() {
     }));
   }, [dispatch, searchParams]);
 
+
   useEffect(() => {
-
-    const search = searchParams.get('search') ?? valueInputVacancy;
-
-    const cityParam = searchParams.get('city');
-    const city: City =
-      cityParam === 'Москва' || cityParam === 'Санкт-Петербург'
-        ? cityParam
-        : 'Все города';
-
-    const skillsParam = searchParams.get('skills');
-    const skills = skillsParam
-      ? skillsParam.split(',')
-      : reduxSkills;
-
+    if (searchParams.has('skills')) {
+      return;
+    }
 
     setSearchParams({
-      search: search,
-      city: city,
-      skills: skills.join(','),
+      search: valueInputVacancy,
+      city: valueInputCity,
+      skills: reduxSkills.join(','),
     })
   }, []);
+
 
   function handleSearch() {
     setSearchParams({
         search: valueInputVacancy,
         city: valueInputCity,
-        skills: skills.join(','),
+        skills: reduxSkills.join(','),
     });
   }
 
@@ -93,7 +85,7 @@ function VacanciesList() {
     setSearchParams({
       search: valueInputVacancy,
       city: newCity,
-      skills: skills.join(','),
+      skills: reduxSkills.join(','),
     })
   }
 
@@ -144,7 +136,7 @@ function VacanciesList() {
                 </div>
               ))}
               <div className={styles.paginationDiv}>
-                <Pagination classNames={{root: styles.paginationRoot}} onChange={(page) => {dispatch(fetchVacancy({page: page, search: valueInputVacancy, city: valueInputCity, skills: skills}))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
+                <Pagination classNames={{root: styles.paginationRoot}} onChange={(page) => {dispatch(fetchVacancy({page: page, search: valueInputVacancy, city: valueInputCity, skills: reduxSkills}))}} value={pagination?.currentPage} total={Number(pagination?.totalPages)} radius="xs" withEdges />
               </div>
             </div>}
         </div>
