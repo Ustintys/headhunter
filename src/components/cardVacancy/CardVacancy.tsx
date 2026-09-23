@@ -32,7 +32,7 @@ function CardVacancy({name, experience, city, company, space, salary, mode, id }
           <Text fw={400} className={styles.locationText}>{city}</Text>
         </div>
       {mode === 'BTN' && (
-          <Link to={`/${id}`}>
+          <Link to={`${id}`}>
             <Button w={175} h={36} radius='sm' fw={400} color='black' mt={12}>Смотреть вакансию</Button>
           </Link>
       )}

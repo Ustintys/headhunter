@@ -23,6 +23,8 @@
 .vacancyBtn{
   align-items: center;
   cursor: pointer;
+  display: flex;
+  gap: 8px;
 }
 
 .homeBtn{
@@ -35,13 +37,25 @@
 .vacancyText{
   font-family: var(--font-family);
   font-size: 14px;
+  color: var(--color-gray);
+}
+
+.vacancyTextActive{
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--color-black);
 }
 
 .homeText{
   font-family: var(--font-family);
   font-size: 14px;
   color: var(--color-gray);
+}
 
+.homeTextActive{
+  font-family: var(--font-family);
+  font-size: 14px;
+  color: var(--color-black);
 }
 
 .circle{
@@ -49,11 +63,18 @@
   height: 6px;
   border-radius: 50%;
   background-color: var(--color-primary);
-  margin-left: 8px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.circleActive {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .cover{
-  width: 230px;
+  width: 244px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -66,4 +87,18 @@
 .link{
   text-decoration: none;
   color: var(--color-black);
+}
+
+.avatarActive {
+  width: 20px;
+  height: 20px;
+  color: var(--color-black);
+}
+
+.avatar{
+  width: 20px;
+  height: 20px;
+  color: var(--color-black);
+  opacity: 0.5;
+  transition: color 0.2s ease;
 }

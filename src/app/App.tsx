@@ -6,6 +6,7 @@ import {
 import Layout from "../components/Layout/Layout.tsx";
 import VacancyInfo from "../modules/VacancyInfo/VacancyInfo.tsx";
 import NoteFound from "../components/404/NoteFound.tsx";
+import AboutUser from "../modules/AboutUser/AboutUser.tsx";
 
 
 
@@ -16,10 +17,13 @@ const router = createBrowserRouter(
       <Route index element={<Navigate to="/vacancies/moscow" replace />} />
 
       <Route path="vacancies">
-        <Route path=":city" element={<VacanciesList />} />
+        <Route path=":city">
+          <Route index element={<VacanciesList />} />
+          <Route path=":vacancyId" element={<VacancyInfo />} />
+        </Route>
       </Route>
 
-      <Route path=":vacancyId" element={<VacancyInfo />} />
+      <Route path="about" element={<AboutUser />}/>
 
       <Route path='*' element={<NoteFound />}/>
     </Route>
